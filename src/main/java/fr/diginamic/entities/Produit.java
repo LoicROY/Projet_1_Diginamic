@@ -407,25 +407,25 @@ public class Produit implements Serializable {
 
     //ingredients
 
-    public void addIngredient(Ingredient ingredient) {
-        if (ingredient != null) {
-            ingredient.getProduits().add(this);
-            this.ingredient.add(ingredient);
+    public void addIngredient(Ingredient ingredients) {
+        if (ingredients != null) {
+            getIngredients().getProduits().add(this);
+            this.ingredients.add(ingredients);
         }
     }
 
-    public void removeIngredient(Ingredient ingredient) {
-        if (ingredient != null) {
-            ingredient.getProduits().remove(this);
-            this.ingredient.remove(ingredient);
+    public void removeIngredient(Ingredient ingredients) {
+        if (ingredients != null) {
+            ingredients.getProduits().remove(this);
+            this.ingredients.remove(ingredients);
         }
     }
 
     //allergenes
-    public void addAllergene(Allergene allergene) {
-        if (allergene != null) {
-            ingredient.getProduits().add(this);
-            this.allergene.add(ingredient);
+    public void addAllergene(Allergene allergenes) {
+        if (allergenes != null) {
+            getAllergenes().getProduits().add(this);
+            this.allergenes.add(allergenes);
         }
     }
 
@@ -433,7 +433,7 @@ public class Produit implements Serializable {
     public void removeAllergene(Ingredient allergene) {
         if (allergene != null) {
             allergene.getProduits().remove(this);
-            this.allergene.remove(allergene);
+            this.allergenes.remove(allergene);
         }
     }
 
@@ -442,28 +442,28 @@ public class Produit implements Serializable {
     public void addAdditif(Additif additif) {
         if (additif != null) {
             additif.getProduits().add(this);
-            this.additif.add(additif);
+            this.additifs.add(additif);
         }
     }
 
     public void removeAdditif(Additif additif) {
         if (additif != null) {
             additif.getProduits().remove(this);
-            this.additif.remove(additif);
+            this.additifs.remove(additif);
         }
     }
 
     // categorie
     public void addCategorie(Categorie categorie) {
         if (categorie != null) {
-            categorie.setProduit(this);
+            categorie.setProduits(this);
         }
     }
 
 
     public void removeCategorie(Categorie categorie) {
         if (categorie != null) {
-            categorie.setProduit(null);
+            categorie.setProduits(null);
         }
     }
 
@@ -471,14 +471,14 @@ public class Produit implements Serializable {
 
     public void addMarque(Marque marque) {
         if (marque != null) {
-            marque.setProduit(this);
+            marque.setProduits();
         }
     }
 
 
     public void removeMarque(Marque marque) {
         if (marque != null) {
-            marque.setProduit(null);
+            marque.setProduits(null);
         }
     }
 
@@ -516,4 +516,4 @@ public class Produit implements Serializable {
                 '}';
     }
 }
-}
+

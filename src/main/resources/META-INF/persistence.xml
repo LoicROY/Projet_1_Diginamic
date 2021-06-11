@@ -7,8 +7,9 @@
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <properties>
             <!-- Paramètres d'accès à la BDD -->
-            <property name="javax.persistence.jdbc.url" value="jdbc:mariadb://localhost:3306/open-food-facts" />
+            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:8889/open-food-facts" />
             <property name="javax.persistence.jdbc.user" value="root" />
+
             <property name="javax.persistence.jdbc.password" value="Fer18rania*" />
             <property name="javax.persistence.jdbc.driver" value="org.mariadb.jdbc.Driver" />
 
