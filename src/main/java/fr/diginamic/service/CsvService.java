@@ -14,6 +14,7 @@ public class CsvService {
     private static final String SEPARATOR_FOR_SPLIT_CSV_TO_STRINGS = "\\|";
     private static final String SEPARATOR_FOR_SPLIT_STRING_TO_OBJECT = ",|;";
     private static final int NUMBER_OF_VALUES_WAITED = 31;
+    private static final int FIRST_ELEMENT = 0;
 
     private static final int CATEGORIE = 0;
     private static final int MARQUE = 1;
@@ -52,6 +53,7 @@ public class CsvService {
 
         //Split les lignes en tableau suivant le séparateur |
         List<String[]> arrayList = splitStringListToArrayList(stringList);
+        arrayList.remove(FIRST_ELEMENT);
 
         //Check que tous les tableaux ont bien 30 valeurs (enleve le tableau si check fail)
         checkArrayList(arrayList);
@@ -81,12 +83,9 @@ public class CsvService {
     }
 
     private static void checkArrayList(List<String[]> arrayList) throws LengthException {
-        List<String[]> arrayCheckFailed = new ArrayList<>();
-
         for (Iterator<String[]> iterator = arrayList.iterator(); iterator.hasNext();){
             String[] array = iterator.next();
             if (!checkLength(array)){
-                arrayCheckFailed.add(array);
                 iterator.remove();
             }
         }
@@ -100,9 +99,10 @@ public class CsvService {
     }
 
     private static Produit transformArrayToObject(String[] array){
+        System.out.println(array[NUTRITION_GRADE_FR]);
         Produit produit = new Produit(
                 array[NOM],
-                NutritionGradeFr.valueOf(array[NUTRITION_GRADE_FR]),
+                NutritionGradeFr.valueOf(array[NUTRITION_GRADE_FR].toUpperCase()),
                 Float.parseFloat(array[ENERGIE_100G]),
                 Float.parseFloat(array[GRAISSE_100G]),
                 Float.parseFloat(array[SUCRE_100G]),
@@ -125,12 +125,13 @@ public class CsvService {
                 Float.parseFloat(array[IRON_100G]),
                 Float.parseFloat(array[FER_100G]),
                 Float.parseFloat(array[BETA_CAROTENE_100G]),
-                Boolean.parseBoolean(array[PRESENCE_HUILE_DE_PALME])
+                BooleanParseService.parseBoolean(array[PRESENCE_HUILE_DE_PALME])
         );
         produit.setCategorie(new Categorie(array[CATEGORIE]));
         produit.setMarque(new Marque(array[MARQUE]));
 
         //Récupère un Set d'Ingredient depuis le string du csv
+        System.out.println(array[INGREDIENTS].trim());
         Set<Ingredient> ingredients = new HashSet<>();
         String[] ingredientsOnStringFormat = array[INGREDIENTS].trim().split(SEPARATOR_FOR_SPLIT_STRING_TO_OBJECT);
         for (String ingredient : ingredientsOnStringFormat) {
@@ -148,7 +149,7 @@ public class CsvService {
 
         //Récupère un Set d'Additif depuis le string du csv
         Set<Additif> additifs = new HashSet<>();
-        String[] additifsOnStringFormat = array[INGREDIENTS].trim().split(SEPARATOR_FOR_SPLIT_STRING_TO_OBJECT);
+        String[] additifsOnStringFormat = array[ADDITIFS].trim().split(SEPARATOR_FOR_SPLIT_STRING_TO_OBJECT);
         for (String additif : additifsOnStringFormat) {
             additifs.add(new Additif(additif.trim()));
         }

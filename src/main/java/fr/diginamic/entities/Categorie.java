@@ -6,14 +6,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "Category")
+@Table(name = "CATEGORIE")
 public class Categorie implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
-    @Column(length = 255)
     private String nom;
 
     @OneToMany(mappedBy = "categorie")

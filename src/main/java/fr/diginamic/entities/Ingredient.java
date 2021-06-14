@@ -11,11 +11,9 @@ public class Ingredient implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
-    @Column(length=255)
     private String nom;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "ingredients")
     private Set<Produit> produits; // --> = null de base
 
     {
@@ -69,7 +67,7 @@ public class Ingredient implements Serializable {
 
             }
         }
-        public void removeProduit (Produit produit){
+        public void removeProduit (Produit produit) throws Exception {
             if (produit != null) {
                 produit.removeIngredient(null);
             }

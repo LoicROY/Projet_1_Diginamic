@@ -12,11 +12,9 @@ public class Allergene implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
-    @Column(length=255)
     private String nom;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "allergenes")
     private Set<Produit> produits; // --> = null de base
 
     {

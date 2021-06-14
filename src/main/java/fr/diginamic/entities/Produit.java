@@ -12,10 +12,7 @@ public class Produit implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
-    @Column(name = "ID")
     private long id;
-
     private String nom;
 
     @Enumerated(EnumType.ORDINAL)
@@ -426,11 +423,18 @@ public class Produit implements Serializable {
         }
     }
 
-    public void removeIngredient(Ingredient ingredients) {
+    public void removeIngredient(Ingredient ingredients) throws Exception {
+        if (!checkIfIngredientIsNotEmptyAfterRemove()){
+            throw new Exception("Un produit doit être rattaché à au moins 1 ingrédient");
+        }
         if (ingredients != null) {
             ingredients.getProduits().remove(this);
             this.ingredients.remove(ingredients);
         }
+    }
+
+    public boolean checkIfIngredientIsNotEmptyAfterRemove(){
+        return this.ingredients.size() > 1;
     }
 
     //allergenes
@@ -464,6 +468,17 @@ public class Produit implements Serializable {
             this.additifs.remove(additif);
         }
     }
+
+
+    //<--------------------------------------------->
+    //Empeche la nullité de l'association produit/ingredient
+    @PrePersist
+    public void checkIngredientsIsNotEmpty() throws Exception {
+        if (this.ingredients.isEmpty()){
+            throw new Exception("Un produit doit être rattaché à au moins 1 ingrédient");
+        }
+    }
+
 
     //<--------------------------------------------->
     //To String

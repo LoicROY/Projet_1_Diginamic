@@ -11,8 +11,6 @@ public class Marque implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
-    @Column(length = 255)
     private String nom;
 
     @OneToMany(mappedBy = "marque")

@@ -10,11 +10,9 @@ public class Additif implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
-    @Column(length=255)
     private String nom;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "additifs")
     private Set<Produit> produits; // --> = null de base
 
     {
