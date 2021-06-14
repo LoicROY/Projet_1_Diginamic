@@ -17,7 +17,7 @@ public class IntegrationOpenFoodFacts {
         System.out.println("connected on db");
 
         try {
-            //Set<Produit> produits = CsvService.TransformCsvIntoObject(PATH);
+            Set<Produit> produits = CsvService.TransformCsvIntoObject(PATH);
 
             //<--------------->
             //test produit
@@ -29,11 +29,7 @@ public class IntegrationOpenFoodFacts {
 
 
             em.getTransaction().begin();
-            em.persist(produit);
-            em.getTransaction().commit();
-
-            em.getTransaction().begin();
-            produit.removeIngredient(ingredient); //-> update
+            em.persist(produits);
             em.getTransaction().commit();
 
 

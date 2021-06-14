@@ -103,35 +103,34 @@ public class CsvService {
         Produit produit = new Produit(
                 array[NOM],
                 NutritionGradeFr.valueOf(array[NUTRITION_GRADE_FR].toUpperCase()),
-                Float.parseFloat(array[ENERGIE_100G]),
-                Float.parseFloat(array[GRAISSE_100G]),
-                Float.parseFloat(array[SUCRE_100G]),
-                Float.parseFloat(array[FIBRE_100G]),
-                Float.parseFloat(array[PROTEINE_100G]),
-                Float.parseFloat(array[SEL_100G]),
-                Float.parseFloat(array[VIT_A_100G]),
-                Float.parseFloat(array[VIT_D_100G]),
-                Float.parseFloat(array[VIT_E_100G]),
-                Float.parseFloat(array[VIT_K_100G]),
-                Float.parseFloat(array[VIT_C_100G]),
-                Float.parseFloat(array[VIT_B1_100G]),
-                Float.parseFloat(array[VIT_B2_100G]),
-                Float.parseFloat(array[VIT_PP_100G]),
-                Float.parseFloat(array[VIT_B6_100G]),
-                Float.parseFloat(array[VIT_B9_100G]),
-                Float.parseFloat(array[VIT_B12_100G]),
-                Float.parseFloat(array[CALCIUM_100G]),
-                Float.parseFloat(array[MAGNESIUM_100G]),
-                Float.parseFloat(array[IRON_100G]),
-                Float.parseFloat(array[FER_100G]),
-                Float.parseFloat(array[BETA_CAROTENE_100G]),
-                BooleanParseService.parseBoolean(array[PRESENCE_HUILE_DE_PALME])
+                ParseService.parseFloat(array[ENERGIE_100G]),
+                ParseService.parseFloat(array[GRAISSE_100G]),
+                ParseService.parseFloat(array[SUCRE_100G]),
+                ParseService.parseFloat(array[FIBRE_100G]),
+                ParseService.parseFloat(array[PROTEINE_100G]),
+                ParseService.parseFloat(array[SEL_100G]),
+                ParseService.parseFloat(array[VIT_A_100G]),
+                ParseService.parseFloat(array[VIT_D_100G]),
+                ParseService.parseFloat(array[VIT_E_100G]),
+                ParseService.parseFloat(array[VIT_K_100G]),
+                ParseService.parseFloat(array[VIT_C_100G]),
+                ParseService.parseFloat(array[VIT_B1_100G]),
+                ParseService.parseFloat(array[VIT_B2_100G]),
+                ParseService.parseFloat(array[VIT_PP_100G]),
+                ParseService.parseFloat(array[VIT_B6_100G]),
+                ParseService.parseFloat(array[VIT_B9_100G]),
+                ParseService.parseFloat(array[VIT_B12_100G]),
+                ParseService.parseFloat(array[CALCIUM_100G]),
+                ParseService.parseFloat(array[MAGNESIUM_100G]),
+                ParseService.parseFloat(array[IRON_100G]),
+                ParseService.parseFloat(array[FER_100G]),
+                ParseService.parseFloat(array[BETA_CAROTENE_100G]),
+                ParseService.parseBoolean(array[PRESENCE_HUILE_DE_PALME])
         );
         produit.setCategorie(new Categorie(array[CATEGORIE]));
         produit.setMarque(new Marque(array[MARQUE]));
 
         //Récupère un Set d'Ingredient depuis le string du csv
-        System.out.println(array[INGREDIENTS].trim());
         Set<Ingredient> ingredients = new HashSet<>();
         String[] ingredientsOnStringFormat = array[INGREDIENTS].trim().split(SEPARATOR_FOR_SPLIT_STRING_TO_OBJECT);
         for (String ingredient : ingredientsOnStringFormat) {
@@ -155,6 +154,9 @@ public class CsvService {
         }
         produit.setAdditifs(additifs);
 
+        //methode(string, Ingredient)
+        //methode(string, Allergene)
+        //methode(string, Additif)
         return produit;
     }
 
