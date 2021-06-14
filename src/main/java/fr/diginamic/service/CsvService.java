@@ -125,7 +125,7 @@ public class CsvService {
                 Float.parseFloat(array[IRON_100G]),
                 Float.parseFloat(array[FER_100G]),
                 Float.parseFloat(array[BETA_CAROTENE_100G]),
-                Float.parseFloat(array[PRESENCE_HUILE_DE_PALME])
+                Boolean.parseBoolean(array[PRESENCE_HUILE_DE_PALME])
         );
         produit.setCategorie(new Categorie(array[CATEGORIE]));
         produit.setMarque(new Marque(array[MARQUE]));
