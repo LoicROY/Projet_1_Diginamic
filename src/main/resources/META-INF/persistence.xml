@@ -18,6 +18,7 @@
             <!-- Drop and create à chaque redémarrage -->
             <property name="javax.persistence.schema-generation.database.action"
                       value="drop-and-create"/>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
 
             <!-- Affichage des requêtes SQL + formatage pour meilleure lecture -->
             <property name="hibernate.show_sql" value="true" />
