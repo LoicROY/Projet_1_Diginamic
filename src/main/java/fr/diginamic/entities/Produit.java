@@ -48,8 +48,8 @@ public class Produit implements Serializable {
     //<--------------------------------------------->
     // Relations
 
-    @ManyToOne
-    @JoinColumn(name = "ID_CATEGORIE", referencedColumnName = "ID")
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "ID_CATEGORIE", referencedColumnName = "ID", nullable = false)
     private Categorie categorie;
 
     @ManyToMany(cascade = CascadeType.PERSIST)
@@ -58,14 +58,14 @@ public class Produit implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "ID_ALLERGENE", referencedColumnName = "ID"))
     private Set<Allergene> allergenes;
 
-    @ManyToOne
-    @JoinColumn(name = "ID_MARQUE", referencedColumnName = "ID")
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "ID_MARQUE", referencedColumnName = "ID", nullable = false)
     private Marque marque;
 
     @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(name = "PRODUIT_INGREDIENT",
-            joinColumns = @JoinColumn(name = "ID_PRODUIT", referencedColumnName = "ID"),
-            inverseJoinColumns = @JoinColumn(name = "ID_INGREDIENT", referencedColumnName = "ID"))
+            joinColumns = @JoinColumn(name = "ID_PRODUIT", referencedColumnName = "ID", nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "ID_INGREDIENT", referencedColumnName = "ID",nullable = false))
     private Set<Ingredient> ingredients;
 
     @ManyToMany(cascade = CascadeType.PERSIST)
@@ -365,7 +365,13 @@ public class Produit implements Serializable {
     }
 
     public void setCategorie(Categorie categorie) {
+        if (this.categorie != null) {
+            this.categorie.getProduits().remove(this);
+        }
         this.categorie = categorie;
+        if (categorie != null) {
+            categorie.getProduits().add(this);
+        }
     }
 
     public Set<Allergene> getAllergenes() {
@@ -381,7 +387,13 @@ public class Produit implements Serializable {
     }
 
     public void setMarque(Marque marque) {
+        if (this.marque != null) {
+            this.marque.getProduits().remove(this);
+        }
         this.marque = marque;
+        if (marque != null) {
+            marque.getProduits().add(this);
+        }
     }
 
     public Set<Ingredient> getIngredients() {
@@ -409,7 +421,7 @@ public class Produit implements Serializable {
 
     public void addIngredient(Ingredient ingredients) {
         if (ingredients != null) {
-            getIngredients().getProduits().add(this);
+            ingredients.getProduits().add(this);
             this.ingredients.add(ingredients);
         }
     }
@@ -424,12 +436,12 @@ public class Produit implements Serializable {
     //allergenes
     public void addAllergene(Allergene allergenes) {
         if (allergenes != null) {
-            getAllergenes().getProduits().add(this);
+            allergenes.getProduits().add(this);
             this.allergenes.add(allergenes);
         }
     }
 
-    // public void removeIngredient( Ingredient ingredient) {
+
     public void removeAllergene(Ingredient allergene) {
         if (allergene != null) {
             allergene.getProduits().remove(this);
@@ -450,35 +462,6 @@ public class Produit implements Serializable {
         if (additif != null) {
             additif.getProduits().remove(this);
             this.additifs.remove(additif);
-        }
-    }
-
-    // categorie
-    public void addCategorie(Categorie categorie) {
-        if (categorie != null) {
-            categorie.setProduits(this);
-        }
-    }
-
-
-    public void removeCategorie(Categorie categorie) {
-        if (categorie != null) {
-            categorie.setProduits(null);
-        }
-    }
-
-//marque
-
-    public void addMarque(Marque marque) {
-        if (marque != null) {
-            marque.setProduits();
-        }
-    }
-
-
-    public void removeMarque(Marque marque) {
-        if (marque != null) {
-            marque.setProduits(null);
         }
     }
 

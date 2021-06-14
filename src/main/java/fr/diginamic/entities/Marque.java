@@ -16,7 +16,7 @@ public class Marque implements Serializable {
     private String nom;
 
     @OneToMany(mappedBy = "marque")
-    private Set<Produit> produits; // --> = null de base
+       private Set<Produit> produits; // --> = null de base
 
     {
         this.produits = new HashSet<>(); // --> me permet d'enlever le "null" et instancie une collection vide
@@ -64,13 +64,13 @@ public class Marque implements Serializable {
 
     public void addProduit(Produit produit) {
         if (produit != null) {
-            produit.addMarque(this);
+            produit.setMarque(this);
         }
     }
 
     public void removeProduit(Produit produit) {
         if (produit != null) {
-            produit.removeMarque(null);
+            produit.setMarque(null);
         }
     }
 

@@ -6,14 +6,14 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name="Category")
+@Table(name = "Category")
 public class Categorie implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(length=255)
+    @Column(length = 255)
     private String nom;
 
     @OneToMany(mappedBy = "categorie")
@@ -65,14 +65,15 @@ public class Categorie implements Serializable {
 
     public void addProduit(Produit produit) {
         if (produit != null) {
-            produit.addCategorie(this);
+            produit.setCategorie(this);
         }
     }
-        public void removeProduit (Produit produit){
-            if (produit != null) {
-                produit.removeCategorie(null);
-            }
+
+    public void removeProduit(Produit produit) {
+        if (produit != null) {
+            produit.setCategorie(null);
         }
+    }
 
     @Override
     public String toString() {

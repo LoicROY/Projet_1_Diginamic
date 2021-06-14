@@ -7,17 +7,11 @@
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <properties>
             <!-- Paramètres d'accès à la BDD -->
-<<<<<<< HEAD
             <property name="javax.persistence.jdbc.url" value="jdbc:mariadb://localhost:3306/open-food-facts" />
             <property name="javax.persistence.jdbc.user" value="root" />
+
             <property name="javax.persistence.jdbc.password" value="Fer18rania*" />
             <property name="javax.persistence.jdbc.driver" value="org.mariadb.jdbc.Driver" />
-=======
-            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:8889/open-food-facts" />
-            <property name="javax.persistence.jdbc.user" value="root" />
-            <property name="javax.persistence.jdbc.password" value="root" />
-            <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
->>>>>>> axel
 
             <!-- Activation de la génération des tables manquantes uniquement -->
             <property name="hibernate.hbm2ddl.auto" value="update"/>
@@ -25,11 +19,7 @@
             <!-- Drop and create à chaque redémarrage -->
             <property name="javax.persistence.schema-generation.database.action"
                       value="drop-and-create"/>
-<<<<<<< HEAD
             <property name="hibernate.hbm2ddl.auto" value="update"/>
-=======
-
->>>>>>> axel
             <!-- Affichage des requêtes SQL + formatage pour meilleure lecture -->
             <property name="hibernate.show_sql" value="true" />
             <property name="hibernate.format_sql" value="true"/>
