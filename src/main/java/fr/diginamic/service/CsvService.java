@@ -12,42 +12,44 @@ import java.util.*;
 public class CsvService {
 
     private static final String SEPARATOR_FOR_SPLIT_CSV_TO_STRINGS = "\\|";
-    private static final String SEPARATOR_FOR_SPLIT_STRING_TO_OBJECT = ",|;";
+    private static final String SEPARATOR_FOR_SPLIT_STRING_TO_OBJECT = "[,;]";
+    private static final String OLD_REGEX = "[\\*\\_\\(\\)\\<\\>\\.]";
+    private static final String NEW_STRING = "";
     private static final int NUMBER_OF_VALUES_WAITED = 31;
     private static final int FIRST_ELEMENT = 0;
 
-    private static final int CATEGORIE = 0;
-    private static final int MARQUE = 1;
-    private static final int NOM = 2;
-    private static final int NUTRITION_GRADE_FR = 3;
-    private static final int INGREDIENTS = 4;
-    private static final int ENERGIE_100G = 5;
-    private static final int GRAISSE_100G = 6;
-    private static final int SUCRE_100G = 7;
-    private static final int FIBRE_100G = 8;
-    private static final int PROTEINE_100G = 9;
-    private static final int SEL_100G = 10;
-    private static final int VIT_A_100G = 11;
-    private static final int VIT_D_100G = 12;
-    private static final int VIT_E_100G = 13;
-    private static final int VIT_K_100G = 14;
-    private static final int VIT_C_100G = 15;
-    private static final int VIT_B1_100G = 16;
-    private static final int VIT_B2_100G = 17;
-    private static final int VIT_PP_100G = 18;
-    private static final int VIT_B6_100G = 19;
-    private static final int VIT_B9_100G= 20;
-    private static final int VIT_B12_100G = 21;
-    private static final int CALCIUM_100G= 22;
-    private static final int MAGNESIUM_100G = 23;
-    private static final int IRON_100G = 24;
-    private static final int FER_100G = 25;
-    private static final int BETA_CAROTENE_100G = 26;
-    private static final int PRESENCE_HUILE_DE_PALME = 27;
-    private static final int ALLERGENES = 28;
-    private static final int ADDITIFS = 29;
+    private static final int CATEGORIE_INDEX = 0;
+    private static final int MARQUE_INDEX = 1;
+    private static final int NOM_INDEX = 2;
+    private static final int NUTRITION_GRADE_FR_INDEX = 3;
+    private static final int INGREDIENTS_INDEX = 4;
+    private static final int ENERGIE_100G_INDEX = 5;
+    private static final int GRAISSE_100G_INDEX = 6;
+    private static final int SUCRE_100G_INDEX = 7;
+    private static final int FIBRE_100G_INDEX = 8;
+    private static final int PROTEINE_100G_INDEX = 9;
+    private static final int SEL_100G_INDEX = 10;
+    private static final int VIT_A_100G_INDEX = 11;
+    private static final int VIT_D_100G_INDEX = 12;
+    private static final int VIT_E_100G_INDEX = 13;
+    private static final int VIT_K_100G_INDEX = 14;
+    private static final int VIT_C_100G_INDEX = 15;
+    private static final int VIT_B1_100G_INDEX = 16;
+    private static final int VIT_B2_100G_INDEX = 17;
+    private static final int VIT_PP_100G_INDEX = 18;
+    private static final int VIT_B6_100G_INDEX = 19;
+    private static final int VIT_B9_100G_INDEX = 20;
+    private static final int VIT_B12_100G_INDEX = 21;
+    private static final int CALCIUM_100G_INDEX = 22;
+    private static final int MAGNESIUM_100G_INDEX = 23;
+    private static final int IRON_100G_INDEX = 24;
+    private static final int FER_100G_INDEX = 25;
+    private static final int BETA_CAROTENE_100G_INDEX = 26;
+    private static final int PRESENCE_HUILE_DE_PALME_INDEX = 27;
+    private static final int ALLERGENES_INDEX = 28;
+    private static final int ADDITIFS_INDEX = 29;
 
-    public static Set<Produit> TransformCsvIntoObject(String path) throws IOException, LengthException {
+    public static Set<Produit> TransformCsvIntoObject(String path) throws IOException {
         //Lecture du fichier
         List<String> stringList = readCsvFile(path);
 
@@ -61,7 +63,7 @@ public class CsvService {
         Set<Produit> produits = new HashSet<>();
         //Transforme les tableaux en objet
         for (String[] array : arrayList) {
-        produits.add(transformArrayToObject(array));
+        produits.add(transformArrayToProduct(array));
         }
 
         return produits;
@@ -82,82 +84,90 @@ public class CsvService {
         return arrayList;
     }
 
-    private static void checkArrayList(List<String[]> arrayList) throws LengthException {
-        for (Iterator<String[]> iterator = arrayList.iterator(); iterator.hasNext();){
-            String[] array = iterator.next();
-            if (!checkLength(array)){
-                iterator.remove();
-            }
-        }
+    private static void checkArrayList(List<String[]> arrayList) {
+        arrayList.removeIf(array -> array.length != NUMBER_OF_VALUES_WAITED);
     }
 
-    private static boolean checkLength(String[] array) throws LengthException {
-        //            throw new LengthException(
-        //                    String.format("Array length(%d) is different from the length waited(%d)",
-        //                            array.length, NUMBER_OF_VALUES_WAITED));
-        return array.length == NUMBER_OF_VALUES_WAITED;
-    }
-
-    private static Produit transformArrayToObject(String[] array){
-        System.out.println(array[NUTRITION_GRADE_FR]);
+    private static Produit transformArrayToProduct(String[] array){
         Produit produit = new Produit(
-                array[NOM],
-                NutritionGradeFr.valueOf(array[NUTRITION_GRADE_FR].toUpperCase()),
-                ParseService.parseFloat(array[ENERGIE_100G]),
-                ParseService.parseFloat(array[GRAISSE_100G]),
-                ParseService.parseFloat(array[SUCRE_100G]),
-                ParseService.parseFloat(array[FIBRE_100G]),
-                ParseService.parseFloat(array[PROTEINE_100G]),
-                ParseService.parseFloat(array[SEL_100G]),
-                ParseService.parseFloat(array[VIT_A_100G]),
-                ParseService.parseFloat(array[VIT_D_100G]),
-                ParseService.parseFloat(array[VIT_E_100G]),
-                ParseService.parseFloat(array[VIT_K_100G]),
-                ParseService.parseFloat(array[VIT_C_100G]),
-                ParseService.parseFloat(array[VIT_B1_100G]),
-                ParseService.parseFloat(array[VIT_B2_100G]),
-                ParseService.parseFloat(array[VIT_PP_100G]),
-                ParseService.parseFloat(array[VIT_B6_100G]),
-                ParseService.parseFloat(array[VIT_B9_100G]),
-                ParseService.parseFloat(array[VIT_B12_100G]),
-                ParseService.parseFloat(array[CALCIUM_100G]),
-                ParseService.parseFloat(array[MAGNESIUM_100G]),
-                ParseService.parseFloat(array[IRON_100G]),
-                ParseService.parseFloat(array[FER_100G]),
-                ParseService.parseFloat(array[BETA_CAROTENE_100G]),
-                ParseService.parseBoolean(array[PRESENCE_HUILE_DE_PALME])
+                array[NOM_INDEX],
+                NutritionGradeFr.valueOf(array[NUTRITION_GRADE_FR_INDEX].toUpperCase()),
+                ParseService.parseFloat(array[ENERGIE_100G_INDEX]),
+                ParseService.parseFloat(array[GRAISSE_100G_INDEX]),
+                ParseService.parseFloat(array[SUCRE_100G_INDEX]),
+                ParseService.parseFloat(array[FIBRE_100G_INDEX]),
+                ParseService.parseFloat(array[PROTEINE_100G_INDEX]),
+                ParseService.parseFloat(array[SEL_100G_INDEX]),
+                ParseService.parseFloat(array[VIT_A_100G_INDEX]),
+                ParseService.parseFloat(array[VIT_D_100G_INDEX]),
+                ParseService.parseFloat(array[VIT_E_100G_INDEX]),
+                ParseService.parseFloat(array[VIT_K_100G_INDEX]),
+                ParseService.parseFloat(array[VIT_C_100G_INDEX]),
+                ParseService.parseFloat(array[VIT_B1_100G_INDEX]),
+                ParseService.parseFloat(array[VIT_B2_100G_INDEX]),
+                ParseService.parseFloat(array[VIT_PP_100G_INDEX]),
+                ParseService.parseFloat(array[VIT_B6_100G_INDEX]),
+                ParseService.parseFloat(array[VIT_B9_100G_INDEX]),
+                ParseService.parseFloat(array[VIT_B12_100G_INDEX]),
+                ParseService.parseFloat(array[CALCIUM_100G_INDEX]),
+                ParseService.parseFloat(array[MAGNESIUM_100G_INDEX]),
+                ParseService.parseFloat(array[IRON_100G_INDEX]),
+                ParseService.parseFloat(array[FER_100G_INDEX]),
+                ParseService.parseFloat(array[BETA_CAROTENE_100G_INDEX]),
+                ParseService.parseBoolean(array[PRESENCE_HUILE_DE_PALME_INDEX])
         );
-        produit.setCategorie(new Categorie(array[CATEGORIE]));
-        produit.setMarque(new Marque(array[MARQUE]));
+        addAssociation(produit, array);
+
+        return produit;
+    }
+
+    private static void addAssociation(Produit produit, String[] array){
+        produit.setCategorie(
+                QueryService.getCategorieIfExistOrCreate(
+                        cleanString(array[CATEGORIE_INDEX])));
+        produit.setMarque(
+                QueryService.getMarqueIfExistOrCreate(
+                        cleanString(array[MARQUE_INDEX])));
 
         //Récupère un Set d'Ingredient depuis le string du csv
         Set<Ingredient> ingredients = new HashSet<>();
-        String[] ingredientsOnStringFormat = array[INGREDIENTS].trim().split(SEPARATOR_FOR_SPLIT_STRING_TO_OBJECT);
+        String[] ingredientsOnStringFormat = array[INGREDIENTS_INDEX].trim().split(SEPARATOR_FOR_SPLIT_STRING_TO_OBJECT);
         for (String ingredient : ingredientsOnStringFormat) {
-            ingredients.add(new Ingredient(ingredient.trim()));
+            ingredient = cleanString(ingredient);
+            if (ingredient.isBlank()){
+                continue;
+            }
+            ingredients.add(QueryService.getIngredientIfExistOrCreate(ingredient.trim()));
         }
         produit.setIngredients(ingredients);
 
         //Récupère un Set d'Allergene depuis le string du csv
         Set<Allergene> allergenes = new HashSet<>();
-        String[] allergenesOnStringFormat = array[ALLERGENES].trim().split(SEPARATOR_FOR_SPLIT_STRING_TO_OBJECT);
+        String[] allergenesOnStringFormat = array[ALLERGENES_INDEX].trim().split(SEPARATOR_FOR_SPLIT_STRING_TO_OBJECT);
         for (String allergene : allergenesOnStringFormat) {
-            allergenes.add(new Allergene(allergene.trim()));
+            allergene = cleanString(allergene);
+            if (allergene.isBlank()){
+                continue;
+            }
+            allergenes.add(QueryService.getAllergeneIfExistOrCreate(allergene.trim()));
         }
         produit.setAllergenes(allergenes);
 
         //Récupère un Set d'Additif depuis le string du csv
         Set<Additif> additifs = new HashSet<>();
-        String[] additifsOnStringFormat = array[ADDITIFS].trim().split(SEPARATOR_FOR_SPLIT_STRING_TO_OBJECT);
+        String[] additifsOnStringFormat = array[ADDITIFS_INDEX].trim().split(SEPARATOR_FOR_SPLIT_STRING_TO_OBJECT);
         for (String additif : additifsOnStringFormat) {
-            additifs.add(new Additif(additif.trim()));
+            additif = cleanString(additif);
+            if (additif.isBlank()){
+                continue;
+            }
+            additifs.add(QueryService.getAdditifIfExistOrCreate(additif.trim()));
         }
         produit.setAdditifs(additifs);
+    }
 
-        //methode(string, Ingredient)
-        //methode(string, Allergene)
-        //methode(string, Additif)
-        return produit;
+    private static String cleanString(String string) {
+        return string.replaceAll(OLD_REGEX, NEW_STRING).trim();
     }
 
 }

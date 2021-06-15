@@ -1,16 +1,21 @@
 package fr.diginamic.entities;
 
+import fr.diginamic.service.QueryService;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@NamedQuery(name = QueryService.NAMED_QUERY_MARQUE, query = "SELECT m FROM Marque m WHERE m.nom = :nom")
 public class Marque implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
+
+    @Column(unique = true)
     private String nom;
 
     @OneToMany(mappedBy = "marque")
@@ -31,16 +36,16 @@ public class Marque implements Serializable {
     }
 
     // constructeur avec les attributs de base + l'id (et donc sans les relations)
-    public Marque(long id, String nom) {
+    public Marque(Long id, String nom) {
         this.id = id;
         this.nom = nom;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -77,6 +82,7 @@ public class Marque implements Serializable {
         return "Marque{" +
                 "id=" + id +
                 ", nom='" + nom + '\'' +
+                ", produits=" + produits.size() +
                 '}';
     }
 }

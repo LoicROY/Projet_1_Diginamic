@@ -12,34 +12,34 @@ public class Produit implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     private String nom;
 
     @Enumerated(EnumType.ORDINAL)
     private NutritionGradeFr nutritionGradeFr;
 
-    private float energie100g;
-    private float graisse100g;
-    private float sucre100g;
-    private float fibre100g;
-    private float proteine100g;
-    private float sel100g;
-    private float vitA100g;
-    private float vitD100g;
-    private float vitE100g;
-    private float vitK100g;
-    private float vitC100g;
-    private float vitB1100g;
-    private float vitB2100g;
-    private float vitPP100g;
-    private float vitB6100g;
-    private float vitB9100g;
-    private float vitB12100g;
-    private float calcium100g;
-    private float magnesium100g;
-    private float iron100g;
-    private float fer100g;
-    private float betaCarotene100g;
+    private Float energie100g;
+    private Float graisse100g;
+    private Float sucre100g;
+    private Float fibre100g;
+    private Float proteine100g;
+    private Float sel100g;
+    private Float vitA100g;
+    private Float vitD100g;
+    private Float vitE100g;
+    private Float vitK100g;
+    private Float vitC100g;
+    private Float vitB1100g;
+    private Float vitB2100g;
+    private Float vitPP100g;
+    private Float vitB6100g;
+    private Float vitB9100g;
+    private Float vitB12100g;
+    private Float calcium100g;
+    private Float magnesium100g;
+    private Float iron100g;
+    private Float fer100g;
+    private Float betaCarotene100g;
     private boolean presenceHuileDePalme;
 
     //<--------------------------------------------->
@@ -87,7 +87,7 @@ public class Produit implements Serializable {
     }
 
     //sans id et sans relation
-    public Produit(String nom, NutritionGradeFr nutritionGradeFr, float energie100g, float graisse100g, float sucre100g, float fibre100g, float proteine100g, float sel100g, float vitA100g, float vitD100g, float vitE100g, float vitK100g, float vitC100g, float vitB1100g, float vitB2100g, float vitPP100g, float vitB6100g, float vitB9100g, float vitB12100g, float calcium100g, float magnesium100g, float iron100g, float fer100g, float betaCarotene100g, boolean presenceHuileDePalme) {
+    public Produit(String nom, NutritionGradeFr nutritionGradeFr, Float energie100g, Float graisse100g, Float sucre100g, Float fibre100g, Float proteine100g, Float sel100g, Float vitA100g, Float vitD100g, Float vitE100g, Float vitK100g, Float vitC100g, Float vitB1100g, Float vitB2100g, Float vitPP100g, Float vitB6100g, Float vitB9100g, Float vitB12100g, Float calcium100g, Float magnesium100g, Float iron100g, Float fer100g, Float betaCarotene100g, boolean presenceHuileDePalme) {
         this.nom = nom;
         this.nutritionGradeFr = nutritionGradeFr;
         this.energie100g = energie100g;
@@ -116,7 +116,7 @@ public class Produit implements Serializable {
     }
 
     //avec id et sans relations
-    public Produit(long id, String nom, NutritionGradeFr nutritionGradeFr, float energie100g, float graisse100g, float sucre100g, float fibre100g, float proteine100g, float sel100g, float vitA100g, float vitD100g, float vitE100g, float vitK100g, float vitC100g, float vitB1100g, float vitB2100g, float vitPP100g, float vitB6100g, float vitB9100g, float vitB12100g, float calcium100g, float magnesium100g, float iron100g, float fer100g, float betaCarotene100g, boolean presenceHuileDePalme) {
+    public Produit(Long id, String nom, NutritionGradeFr nutritionGradeFr, Float energie100g, Float graisse100g, Float sucre100g, Float fibre100g, Float proteine100g, Float sel100g, Float vitA100g, Float vitD100g, Float vitE100g, Float vitK100g, Float vitC100g, Float vitB1100g, Float vitB2100g, Float vitPP100g, Float vitB6100g, Float vitB9100g, Float vitB12100g, Float calcium100g, Float magnesium100g, Float iron100g, Float fer100g, Float betaCarotene100g, boolean presenceHuileDePalme) {
         this.id = id;
         this.nom = nom;
         this.nutritionGradeFr = nutritionGradeFr;
@@ -149,11 +149,11 @@ public class Produit implements Serializable {
     //<--------------------------------------------->
     //Getters et Setters
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -173,179 +173,179 @@ public class Produit implements Serializable {
         this.nutritionGradeFr = nutritionGradeFr;
     }
 
-    public float getEnergie100g() {
+    public Float getEnergie100g() {
         return energie100g;
     }
 
-    public void setEnergie100g(float energie100g) {
+    public void setEnergie100g(Float energie100g) {
         this.energie100g = energie100g;
     }
 
-    public float getGraisse100g() {
+    public Float getGraisse100g() {
         return graisse100g;
     }
 
-    public void setGraisse100g(float graisse100g) {
+    public void setGraisse100g(Float graisse100g) {
         this.graisse100g = graisse100g;
     }
 
-    public float getSucre100g() {
+    public Float getSucre100g() {
         return sucre100g;
     }
 
-    public void setSucre100g(float sucre100g) {
+    public void setSucre100g(Float sucre100g) {
         this.sucre100g = sucre100g;
     }
 
-    public float getFibre100g() {
+    public Float getFibre100g() {
         return fibre100g;
     }
 
-    public void setFibre100g(float fibre100g) {
+    public void setFibre100g(Float fibre100g) {
         this.fibre100g = fibre100g;
     }
 
-    public float getProteine100g() {
+    public Float getProteine100g() {
         return proteine100g;
     }
 
-    public void setProteine100g(float proteine100g) {
+    public void setProteine100g(Float proteine100g) {
         this.proteine100g = proteine100g;
     }
 
-    public float getSel100g() {
+    public Float getSel100g() {
         return sel100g;
     }
 
-    public void setSel100g(float sel100g) {
+    public void setSel100g(Float sel100g) {
         this.sel100g = sel100g;
     }
 
-    public float getVitA100g() {
+    public Float getVitA100g() {
         return vitA100g;
     }
 
-    public void setVitA100g(float vitA100g) {
+    public void setVitA100g(Float vitA100g) {
         this.vitA100g = vitA100g;
     }
 
-    public float getVitD100g() {
+    public Float getVitD100g() {
         return vitD100g;
     }
 
-    public void setVitD100g(float vitD100g) {
+    public void setVitD100g(Float vitD100g) {
         this.vitD100g = vitD100g;
     }
 
-    public float getVitE100g() {
+    public Float getVitE100g() {
         return vitE100g;
     }
 
-    public void setVitE100g(float vitE100g) {
+    public void setVitE100g(Float vitE100g) {
         this.vitE100g = vitE100g;
     }
 
-    public float getVitK100g() {
+    public Float getVitK100g() {
         return vitK100g;
     }
 
-    public void setVitK100g(float vitK100g) {
+    public void setVitK100g(Float vitK100g) {
         this.vitK100g = vitK100g;
     }
 
-    public float getVitC100g() {
+    public Float getVitC100g() {
         return vitC100g;
     }
 
-    public void setVitC100g(float vitC100g) {
+    public void setVitC100g(Float vitC100g) {
         this.vitC100g = vitC100g;
     }
 
-    public float getVitB1100g() {
+    public Float getVitB1100g() {
         return vitB1100g;
     }
 
-    public void setVitB1100g(float vitB1100g) {
+    public void setVitB1100g(Float vitB1100g) {
         this.vitB1100g = vitB1100g;
     }
 
-    public float getVitB2100g() {
+    public Float getVitB2100g() {
         return vitB2100g;
     }
 
-    public void setVitB2100g(float vitB2100g) {
+    public void setVitB2100g(Float vitB2100g) {
         this.vitB2100g = vitB2100g;
     }
 
-    public float getVitPP100g() {
+    public Float getVitPP100g() {
         return vitPP100g;
     }
 
-    public void setVitPP100g(float vitPP100g) {
+    public void setVitPP100g(Float vitPP100g) {
         this.vitPP100g = vitPP100g;
     }
 
-    public float getVitB6100g() {
+    public Float getVitB6100g() {
         return vitB6100g;
     }
 
-    public void setVitB6100g(float vitB6100g) {
+    public void setVitB6100g(Float vitB6100g) {
         this.vitB6100g = vitB6100g;
     }
 
-    public float getVitB9100g() {
+    public Float getVitB9100g() {
         return vitB9100g;
     }
 
-    public void setVitB9100g(float vitB9100g) {
+    public void setVitB9100g(Float vitB9100g) {
         this.vitB9100g = vitB9100g;
     }
 
-    public float getVitB12100g() {
+    public Float getVitB12100g() {
         return vitB12100g;
     }
 
-    public void setVitB12100g(float vitB12100g) {
+    public void setVitB12100g(Float vitB12100g) {
         this.vitB12100g = vitB12100g;
     }
 
-    public float getCalcium100g() {
+    public Float getCalcium100g() {
         return calcium100g;
     }
 
-    public void setCalcium100g(float calcium100g) {
+    public void setCalcium100g(Float calcium100g) {
         this.calcium100g = calcium100g;
     }
 
-    public float getMagnesium100g() {
+    public Float getMagnesium100g() {
         return magnesium100g;
     }
 
-    public void setMagnesium100g(float magnesium100g) {
+    public void setMagnesium100g(Float magnesium100g) {
         this.magnesium100g = magnesium100g;
     }
 
-    public float getIron100g() {
+    public Float getIron100g() {
         return iron100g;
     }
 
-    public void setIron100g(float iron100g) {
+    public void setIron100g(Float iron100g) {
         this.iron100g = iron100g;
     }
 
-    public float getFer100g() {
+    public Float getFer100g() {
         return fer100g;
     }
 
-    public void setFer100g(float fer100g) {
+    public void setFer100g(Float fer100g) {
         this.fer100g = fer100g;
     }
 
-    public float getBetaCarotene100g() {
+    public Float getBetaCarotene100g() {
         return betaCarotene100g;
     }
 
-    public void setBetaCarotene100g(float betaCarotene100g) {
+    public void setBetaCarotene100g(Float betaCarotene100g) {
         this.betaCarotene100g = betaCarotene100g;
     }
 
@@ -446,7 +446,7 @@ public class Produit implements Serializable {
     }
 
 
-    public void removeAllergene(Ingredient allergene) {
+    public void removeAllergene(Allergene allergene) {
         if (allergene != null) {
             allergene.getProduits().remove(this);
             this.allergenes.remove(allergene);
@@ -482,6 +482,7 @@ public class Produit implements Serializable {
 
     //<--------------------------------------------->
     //To String
+
     @Override
     public String toString() {
         return "Produit{" +
@@ -511,6 +512,11 @@ public class Produit implements Serializable {
                 ", fer100g=" + fer100g +
                 ", betaCarotene100g=" + betaCarotene100g +
                 ", presenceHuileDePalme=" + presenceHuileDePalme +
+//                ", categorie=" + categorie.getId() +
+//                ", allergenes=" + allergenes.size() +
+//                ", marque=" + marque.getId() +
+//                ", ingredients=" + ingredients.size() +
+//                ", additifs=" + additifs.size() +
                 '}';
     }
 }
