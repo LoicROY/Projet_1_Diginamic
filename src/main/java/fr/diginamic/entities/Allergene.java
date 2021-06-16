@@ -16,7 +16,7 @@ public class Allergene implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String nom;
 
     @ManyToMany(mappedBy = "allergenes")

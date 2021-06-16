@@ -8,6 +8,7 @@ public class EntityManagerFactoryService {
 
     private static EntityManagerFactoryService instance;
     private EntityManagerFactory entityManagerFactory;
+    private EntityManager entityManager;
 
     private EntityManagerFactoryService(){
         connectToDataBase();
@@ -25,14 +26,17 @@ public class EntityManagerFactoryService {
         if (!this.entityManagerFactory.isOpen()){
             connectToDataBase();
         }
-        return this.entityManagerFactory.createEntityManager();
+        return this.entityManager;
     }
 
     private void connectToDataBase(){
         this.entityManagerFactory = Persistence.createEntityManagerFactory("open-food-facts");
+        this.entityManager = this.entityManagerFactory.createEntityManager();
+        System.out.println("connected on db");
     }
 
     public void close(){
+        this.entityManager.close();
         this.entityManagerFactory.close();
     }
 }

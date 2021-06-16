@@ -15,6 +15,7 @@ public class QueryService {
     public static final String NAMED_QUERY_MARQUE = "marque.findByNom";
     private static final String PARAMETER = "nom";
 
+
     public static Categorie getCategorieIfExistOrCreate(String nom) {
         try {
             return ENTITY_MANAGER.createNamedQuery(NAMED_QUERY_CATEGORIE, Categorie.class)

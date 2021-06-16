@@ -13,6 +13,8 @@ public class Produit implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
     private String nom;
 
     @Enumerated(EnumType.ORDINAL)
@@ -486,37 +488,37 @@ public class Produit implements Serializable {
     @Override
     public String toString() {
         return "Produit{" +
-                "id=" + id +
+//                "id=" + id +
                 ", nom='" + nom + '\'' +
-                ", nutritionGradeFr=" + nutritionGradeFr +
-                ", energie100g=" + energie100g +
-                ", graisse100g=" + graisse100g +
-                ", sucre100g=" + sucre100g +
-                ", fibre100g=" + fibre100g +
-                ", proteine100g=" + proteine100g +
-                ", sel100g=" + sel100g +
-                ", vitA100g=" + vitA100g +
-                ", vitD100g=" + vitD100g +
-                ", vitE100g=" + vitE100g +
-                ", vitK100g=" + vitK100g +
-                ", vitC100g=" + vitC100g +
-                ", vitB1100g=" + vitB1100g +
-                ", vitB2100g=" + vitB2100g +
-                ", vitPP100g=" + vitPP100g +
-                ", vitB6100g=" + vitB6100g +
-                ", vitB9100g=" + vitB9100g +
-                ", vitB12100g=" + vitB12100g +
-                ", calcium100g=" + calcium100g +
-                ", magnesium100g=" + magnesium100g +
-                ", iron100g=" + iron100g +
-                ", fer100g=" + fer100g +
-                ", betaCarotene100g=" + betaCarotene100g +
-                ", presenceHuileDePalme=" + presenceHuileDePalme +
-//                ", categorie=" + categorie.getId() +
-//                ", allergenes=" + allergenes.size() +
-//                ", marque=" + marque.getId() +
-//                ", ingredients=" + ingredients.size() +
-//                ", additifs=" + additifs.size() +
+//                ", nutritionGradeFr=" + nutritionGradeFr +
+//                ", energie100g=" + energie100g +
+//                ", graisse100g=" + graisse100g +
+//                ", sucre100g=" + sucre100g +
+//                ", fibre100g=" + fibre100g +
+//                ", proteine100g=" + proteine100g +
+//                ", sel100g=" + sel100g +
+//                ", vitA100g=" + vitA100g +
+//                ", vitD100g=" + vitD100g +
+//                ", vitE100g=" + vitE100g +
+//                ", vitK100g=" + vitK100g +
+//                ", vitC100g=" + vitC100g +
+//                ", vitB1100g=" + vitB1100g +
+//                ", vitB2100g=" + vitB2100g +
+//                ", vitPP100g=" + vitPP100g +
+//                ", vitB6100g=" + vitB6100g +
+//                ", vitB9100g=" + vitB9100g +
+//                ", vitB12100g=" + vitB12100g +
+//                ", calcium100g=" + calcium100g +
+//                ", magnesium100g=" + magnesium100g +
+//                ", iron100g=" + iron100g +
+//                ", fer100g=" + fer100g +
+//                ", betaCarotene100g=" + betaCarotene100g +
+//                ", presenceHuileDePalme=" + presenceHuileDePalme +
+//                ", categorie=" + categorie +
+                ", allergenes=" + allergenes +
+//                ", marque=" + marque +
+//                ", ingredients=" + ingredients +
+//                ", additifs=" + additifs +
                 '}';
     }
 }

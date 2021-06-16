@@ -2,6 +2,7 @@ package fr.diginamic.service;
 
 import fr.diginamic.entities.*;
 
+import javax.persistence.EntityManager;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -11,12 +12,15 @@ import java.util.*;
 
 public class CsvService {
 
+    private static final EntityManager ENTITY_MANAGER = EntityManagerFactoryService.getInstance().getEntityManager();
+
     private static final String SEPARATOR_FOR_SPLIT_CSV_TO_STRINGS = "\\|";
     private static final String SEPARATOR_FOR_SPLIT_STRING_TO_OBJECT = "[,;]";
     private static final String OLD_REGEX = "[\\*\\_\\(\\)\\<\\>\\.]";
     private static final String NEW_STRING = "";
     private static final int NUMBER_OF_VALUES_WAITED = 31;
     private static final int FIRST_ELEMENT = 0;
+    private static final int VARCHAR_MAX_LENGTH = 255;
 
     private static final int CATEGORIE_INDEX = 0;
     private static final int MARQUE_INDEX = 1;
@@ -63,9 +67,13 @@ public class CsvService {
         Set<Produit> produits = new HashSet<>();
         //Transforme les tableaux en objet
         for (String[] array : arrayList) {
-        produits.add(transformArrayToProduct(array));
+            Produit produit = transformArrayToProduct(array);
+            System.out.println(produit);
+            persistProduct(produit);
+            produits.add(produit);
         }
 
+        ENTITY_MANAGER.close();
         return produits;
     }
 
@@ -88,7 +96,7 @@ public class CsvService {
         arrayList.removeIf(array -> array.length != NUMBER_OF_VALUES_WAITED);
     }
 
-    private static Produit transformArrayToProduct(String[] array){
+    private static Produit transformArrayToProduct(String[] array) {
         Produit produit = new Produit(
                 array[NOM_INDEX],
                 NutritionGradeFr.valueOf(array[NUTRITION_GRADE_FR_INDEX].toUpperCase()),
@@ -121,7 +129,7 @@ public class CsvService {
         return produit;
     }
 
-    private static void addAssociation(Produit produit, String[] array){
+    private static void addAssociation(Produit produit, String[] array) {
         produit.setCategorie(
                 QueryService.getCategorieIfExistOrCreate(
                         cleanString(array[CATEGORIE_INDEX])));
@@ -134,10 +142,16 @@ public class CsvService {
         String[] ingredientsOnStringFormat = array[INGREDIENTS_INDEX].trim().split(SEPARATOR_FOR_SPLIT_STRING_TO_OBJECT);
         for (String ingredient : ingredientsOnStringFormat) {
             ingredient = cleanString(ingredient);
-            if (ingredient.isBlank()){
+            if (ingredient.isBlank()) {
                 continue;
             }
-            ingredients.add(QueryService.getIngredientIfExistOrCreate(ingredient.trim()));
+            if (ingredient.length() > VARCHAR_MAX_LENGTH){
+                ingredient = ingredient.substring(0, VARCHAR_MAX_LENGTH - 1);
+            }
+            Ingredient ingredientToAdd = QueryService.getIngredientIfExistOrCreate(ingredient);
+            if (!FilterSetService.checkIfIngredientAlreadyInList(ingredients, ingredientToAdd)) {
+                ingredients.add(ingredientToAdd);
+            }
         }
         produit.setIngredients(ingredients);
 
@@ -146,10 +160,16 @@ public class CsvService {
         String[] allergenesOnStringFormat = array[ALLERGENES_INDEX].trim().split(SEPARATOR_FOR_SPLIT_STRING_TO_OBJECT);
         for (String allergene : allergenesOnStringFormat) {
             allergene = cleanString(allergene);
-            if (allergene.isBlank()){
+            if (allergene.isBlank()) {
                 continue;
             }
-            allergenes.add(QueryService.getAllergeneIfExistOrCreate(allergene.trim()));
+            if (allergene.length() > VARCHAR_MAX_LENGTH){
+                allergene = allergene.substring(0, VARCHAR_MAX_LENGTH - 1);
+            }
+            Allergene allergeneToAdd = QueryService.getAllergeneIfExistOrCreate(allergene);
+            if (!FilterSetService.checkIfAllergeneAlreadyInList(allergenes, allergeneToAdd)) {
+                allergenes.add(allergeneToAdd);
+            }
         }
         produit.setAllergenes(allergenes);
 
@@ -158,16 +178,28 @@ public class CsvService {
         String[] additifsOnStringFormat = array[ADDITIFS_INDEX].trim().split(SEPARATOR_FOR_SPLIT_STRING_TO_OBJECT);
         for (String additif : additifsOnStringFormat) {
             additif = cleanString(additif);
-            if (additif.isBlank()){
+            if (additif.isBlank()) {
                 continue;
             }
-            additifs.add(QueryService.getAdditifIfExistOrCreate(additif.trim()));
+            if (additif.length() > VARCHAR_MAX_LENGTH){
+                additif = additif.substring(0, VARCHAR_MAX_LENGTH - 1);
+            }
+            Additif additifToAdd = QueryService.getAdditifIfExistOrCreate(additif);
+            if (!FilterSetService.checkIfAdditifAlreadyInList(additifs, additifToAdd)) {
+                additifs.add(additifToAdd);
+            }
         }
         produit.setAdditifs(additifs);
     }
 
     private static String cleanString(String string) {
         return string.replaceAll(OLD_REGEX, NEW_STRING).trim();
+    }
+
+    private static void persistProduct(Produit produit) {
+        ENTITY_MANAGER.getTransaction().begin();
+        ENTITY_MANAGER.persist(produit);
+        ENTITY_MANAGER.getTransaction().commit();
     }
 
 }
