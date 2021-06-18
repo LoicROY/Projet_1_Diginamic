@@ -1,23 +1,13 @@
 package fr.diginamic.entities;
 
-import fr.diginamic.service.QueryService;
-
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "CATEGORIE")
-@NamedQuery(name = QueryService.NAMED_QUERY_CATEGORIE, query = "SELECT c FROM Categorie c WHERE c.nom = :nom")
-public class Categorie implements Serializable {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(unique = true, nullable = false)
-    private String nom;
+@NamedQuery(name = "Categorie.findByNom", query = "SELECT c FROM Categorie c WHERE c.nom = :nom")
+public class Categorie extends BasedEntity {
 
     @OneToMany(mappedBy = "categorie")
     private Set<Produit> produits; // --> = null de base
@@ -33,29 +23,12 @@ public class Categorie implements Serializable {
 
     // constructeur avec les attributs de base sans l'id (et donc sans les relations)
     public Categorie(String nom) {
-        this.nom = nom;
+        super(nom);
     }
 
     // constructeur avec les attributs de base + l'id (et donc sans les relations)
     public Categorie(Long id, String nom) {
-        this.id = id;
-        this.nom = nom;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNom() {
-        return nom;
-    }
-
-    public void setNom(String nom) {
-        this.nom = nom;
+        super(id, nom);
     }
 
     public Set<Produit> getProduits() {

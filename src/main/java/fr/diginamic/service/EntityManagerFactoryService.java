@@ -10,33 +10,37 @@ public class EntityManagerFactoryService {
     private EntityManagerFactory entityManagerFactory;
     private EntityManager entityManager;
 
-    private EntityManagerFactoryService(){
+    private EntityManagerFactoryService() {
         connectToDataBase();
     }
 
     //Singleton
-    public static EntityManagerFactoryService getInstance(){
-        if (instance == null){
+    public static EntityManagerFactoryService getInstance() {
+        if (instance == null) {
             instance = new EntityManagerFactoryService();
         }
         return instance;
     }
 
-    public EntityManager getEntityManager(){
-        if (!this.entityManagerFactory.isOpen()){
+    public EntityManager getEntityManager() {
+        if (!this.entityManagerFactory.isOpen()) {
             connectToDataBase();
         }
         return this.entityManager;
     }
 
-    private void connectToDataBase(){
+    private void connectToDataBase() {
         this.entityManagerFactory = Persistence.createEntityManagerFactory("open-food-facts");
         this.entityManager = this.entityManagerFactory.createEntityManager();
         System.out.println("connected on db");
     }
 
-    public void close(){
-        this.entityManager.close();
-        this.entityManagerFactory.close();
+    public void close() {
+        if (this.entityManagerFactory.isOpen()) {
+            if (this.entityManager.isOpen()) {
+                this.entityManager.close();
+            }
+            this.entityManagerFactory.close();
+        }
     }
 }

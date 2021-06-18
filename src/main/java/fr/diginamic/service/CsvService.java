@@ -4,6 +4,7 @@ import fr.diginamic.entities.*;
 
 import javax.persistence.EntityManager;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -14,14 +15,18 @@ public class CsvService {
 
     private static final EntityManager ENTITY_MANAGER = EntityManagerFactoryService.getInstance().getEntityManager();
 
+    //REGEX for split and replace
     private static final String SEPARATOR_FOR_SPLIT_CSV_TO_STRINGS = "\\|";
     private static final String SEPARATOR_FOR_SPLIT_STRING_TO_OBJECT = "[,;]";
     private static final String OLD_REGEX = "[\\*\\_\\(\\)\\<\\>\\.]";
     private static final String NEW_STRING = "";
+
+    //Integer for check and remove
     private static final int NUMBER_OF_VALUES_WAITED = 31;
     private static final int FIRST_ELEMENT = 0;
     private static final int VARCHAR_MAX_LENGTH = 255;
 
+    //Index for produit attributes
     private static final int CATEGORIE_INDEX = 0;
     private static final int MARQUE_INDEX = 1;
     private static final int NOM_INDEX = 2;
@@ -53,7 +58,9 @@ public class CsvService {
     private static final int ALLERGENES_INDEX = 28;
     private static final int ADDITIFS_INDEX = 29;
 
-    public static Set<Produit> TransformCsvIntoObject(String path) throws IOException {
+    public static Set<Produit> TransformCsvIntoObject(String path)
+            throws IOException, InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException {
+
         //Lecture du fichier
         List<String> stringList = readCsvFile(path);
 
@@ -73,7 +80,6 @@ public class CsvService {
             produits.add(produit);
         }
 
-        ENTITY_MANAGER.close();
         return produits;
     }
 
@@ -96,7 +102,9 @@ public class CsvService {
         arrayList.removeIf(array -> array.length != NUMBER_OF_VALUES_WAITED);
     }
 
-    private static Produit transformArrayToProduct(String[] array) {
+    private static Produit transformArrayToProduct(String[] array)
+            throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException {
+
         Produit produit = new Produit(
                 array[NOM_INDEX],
                 NutritionGradeFr.valueOf(array[NUTRITION_GRADE_FR_INDEX].toUpperCase()),
@@ -129,67 +137,42 @@ public class CsvService {
         return produit;
     }
 
-    private static void addAssociation(Produit produit, String[] array) {
+    private static void addAssociation(Produit produit, String[] array)
+            throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException {
+
+        //Association OneToMany
         produit.setCategorie(
-                QueryService.getCategorieIfExistOrCreate(
-                        cleanString(array[CATEGORIE_INDEX])));
+                QueryService.getIfExistOnDatabaseOrCreate(
+                        cleanString(array[CATEGORIE_INDEX]), Categorie.class));
         produit.setMarque(
-                QueryService.getMarqueIfExistOrCreate(
-                        cleanString(array[MARQUE_INDEX])));
+                QueryService.getIfExistOnDatabaseOrCreate(
+                        cleanString(array[MARQUE_INDEX]), Marque.class));
 
-        //Récupère un Set d'Ingredient depuis le string du csv
-        Set<Ingredient> ingredients = new HashSet<>();
-        String[] ingredientsOnStringFormat = array[INGREDIENTS_INDEX].trim().split(SEPARATOR_FOR_SPLIT_STRING_TO_OBJECT);
-        for (String ingredient : ingredientsOnStringFormat) {
-            ingredient = cleanString(ingredient);
-            if (ingredient.isBlank()) {
+        //Association ManyToMany
+        produit.setIngredients(getObjectListFromString(array[INGREDIENTS_INDEX], Ingredient.class));
+        produit.setAllergenes(getObjectListFromString(array[ALLERGENES_INDEX], Allergene.class));
+        produit.setAdditifs(getObjectListFromString(array[ADDITIFS_INDEX], Additif.class));
+    }
+
+    private static <T extends NamedEntity> Set<T> getObjectListFromString(String stringOfProduct, Class<T> type)
+            throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException {
+
+        Set<T> objects = new HashSet<>();
+        String[] objectsOnStringFormat = stringOfProduct.trim().split(SEPARATOR_FOR_SPLIT_STRING_TO_OBJECT);
+        for (String objectOnStringFormat : objectsOnStringFormat) {
+            objectOnStringFormat = cleanString(objectOnStringFormat);
+            if (objectOnStringFormat.isBlank()) {
                 continue;
             }
-            if (ingredient.length() > VARCHAR_MAX_LENGTH){
-                ingredient = ingredient.substring(0, VARCHAR_MAX_LENGTH - 1);
+            if (objectOnStringFormat.length() > VARCHAR_MAX_LENGTH) {
+                objectOnStringFormat = objectOnStringFormat.substring(0, VARCHAR_MAX_LENGTH - 1);
             }
-            Ingredient ingredientToAdd = QueryService.getIngredientIfExistOrCreate(ingredient);
-            if (!FilterSetService.checkIfIngredientAlreadyInList(ingredients, ingredientToAdd)) {
-                ingredients.add(ingredientToAdd);
-            }
-        }
-        produit.setIngredients(ingredients);
-
-        //Récupère un Set d'Allergene depuis le string du csv
-        Set<Allergene> allergenes = new HashSet<>();
-        String[] allergenesOnStringFormat = array[ALLERGENES_INDEX].trim().split(SEPARATOR_FOR_SPLIT_STRING_TO_OBJECT);
-        for (String allergene : allergenesOnStringFormat) {
-            allergene = cleanString(allergene);
-            if (allergene.isBlank()) {
-                continue;
-            }
-            if (allergene.length() > VARCHAR_MAX_LENGTH){
-                allergene = allergene.substring(0, VARCHAR_MAX_LENGTH - 1);
-            }
-            Allergene allergeneToAdd = QueryService.getAllergeneIfExistOrCreate(allergene);
-            if (!FilterSetService.checkIfAllergeneAlreadyInList(allergenes, allergeneToAdd)) {
-                allergenes.add(allergeneToAdd);
+            T object= QueryService.getIfExistOnDatabaseOrCreate(objectOnStringFormat, type);
+            if (!FilterSetService.checkIfAlreadyInList(objects, object)) {
+                objects.add(object);
             }
         }
-        produit.setAllergenes(allergenes);
-
-        //Récupère un Set d'Additif depuis le string du csv
-        Set<Additif> additifs = new HashSet<>();
-        String[] additifsOnStringFormat = array[ADDITIFS_INDEX].trim().split(SEPARATOR_FOR_SPLIT_STRING_TO_OBJECT);
-        for (String additif : additifsOnStringFormat) {
-            additif = cleanString(additif);
-            if (additif.isBlank()) {
-                continue;
-            }
-            if (additif.length() > VARCHAR_MAX_LENGTH){
-                additif = additif.substring(0, VARCHAR_MAX_LENGTH - 1);
-            }
-            Additif additifToAdd = QueryService.getAdditifIfExistOrCreate(additif);
-            if (!FilterSetService.checkIfAdditifAlreadyInList(additifs, additifToAdd)) {
-                additifs.add(additifToAdd);
-            }
-        }
-        produit.setAdditifs(additifs);
+        return objects;
     }
 
     private static String cleanString(String string) {

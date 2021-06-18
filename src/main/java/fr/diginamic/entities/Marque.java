@@ -1,22 +1,12 @@
 package fr.diginamic.entities;
 
-import fr.diginamic.service.QueryService;
-
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@NamedQuery(name = QueryService.NAMED_QUERY_MARQUE, query = "SELECT m FROM Marque m WHERE m.nom = :nom")
-public class Marque implements Serializable {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(unique = true, nullable = false)
-    private String nom;
+@NamedQuery(name = "Marque.findByNom", query = "SELECT m FROM Marque m WHERE m.nom = :nom")
+public class Marque extends BasedEntity {
 
     @OneToMany(mappedBy = "marque")
        private Set<Produit> produits; // --> = null de base
@@ -32,29 +22,12 @@ public class Marque implements Serializable {
 
     // constructeur avec les attributs de base sans l'id (et donc sans les relations)
     public Marque(String nom) {
-        this.nom = nom;
+        super(nom);
     }
 
     // constructeur avec les attributs de base + l'id (et donc sans les relations)
     public Marque(Long id, String nom) {
-        this.id = id;
-        this.nom = nom;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNom() {
-        return nom;
-    }
-
-    public void setNom(String nom) {
-        this.nom = nom;
+        super(id, nom);
     }
 
     public Set<Produit> getProduits() {

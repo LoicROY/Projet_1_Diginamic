@@ -1,21 +1,13 @@
 package fr.diginamic.entities;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
 
 @Entity
 @Table(name = "PRODUIT")
-public class Produit implements Serializable {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(nullable = false)
-    private String nom;
+public class Produit extends BasedEntity {
 
     @Enumerated(EnumType.ORDINAL)
     private NutritionGradeFr nutritionGradeFr;
@@ -90,7 +82,7 @@ public class Produit implements Serializable {
 
     //sans id et sans relation
     public Produit(String nom, NutritionGradeFr nutritionGradeFr, Float energie100g, Float graisse100g, Float sucre100g, Float fibre100g, Float proteine100g, Float sel100g, Float vitA100g, Float vitD100g, Float vitE100g, Float vitK100g, Float vitC100g, Float vitB1100g, Float vitB2100g, Float vitPP100g, Float vitB6100g, Float vitB9100g, Float vitB12100g, Float calcium100g, Float magnesium100g, Float iron100g, Float fer100g, Float betaCarotene100g, boolean presenceHuileDePalme) {
-        this.nom = nom;
+        super(nom);
         this.nutritionGradeFr = nutritionGradeFr;
         this.energie100g = energie100g;
         this.graisse100g = graisse100g;
@@ -119,8 +111,7 @@ public class Produit implements Serializable {
 
     //avec id et sans relations
     public Produit(Long id, String nom, NutritionGradeFr nutritionGradeFr, Float energie100g, Float graisse100g, Float sucre100g, Float fibre100g, Float proteine100g, Float sel100g, Float vitA100g, Float vitD100g, Float vitE100g, Float vitK100g, Float vitC100g, Float vitB1100g, Float vitB2100g, Float vitPP100g, Float vitB6100g, Float vitB9100g, Float vitB12100g, Float calcium100g, Float magnesium100g, Float iron100g, Float fer100g, Float betaCarotene100g, boolean presenceHuileDePalme) {
-        this.id = id;
-        this.nom = nom;
+        super(id, nom);
         this.nutritionGradeFr = nutritionGradeFr;
         this.energie100g = energie100g;
         this.graisse100g = graisse100g;
@@ -150,22 +141,6 @@ public class Produit implements Serializable {
 
     //<--------------------------------------------->
     //Getters et Setters
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNom() {
-        return nom;
-    }
-
-    public void setNom(String nom) {
-        this.nom = nom;
-    }
 
     public NutritionGradeFr getNutritionGradeFr() {
         return nutritionGradeFr;
@@ -488,37 +463,37 @@ public class Produit implements Serializable {
     @Override
     public String toString() {
         return "Produit{" +
-//                "id=" + id +
+                "id=" + id +
                 ", nom='" + nom + '\'' +
-//                ", nutritionGradeFr=" + nutritionGradeFr +
-//                ", energie100g=" + energie100g +
-//                ", graisse100g=" + graisse100g +
-//                ", sucre100g=" + sucre100g +
-//                ", fibre100g=" + fibre100g +
-//                ", proteine100g=" + proteine100g +
-//                ", sel100g=" + sel100g +
-//                ", vitA100g=" + vitA100g +
-//                ", vitD100g=" + vitD100g +
-//                ", vitE100g=" + vitE100g +
-//                ", vitK100g=" + vitK100g +
-//                ", vitC100g=" + vitC100g +
-//                ", vitB1100g=" + vitB1100g +
-//                ", vitB2100g=" + vitB2100g +
-//                ", vitPP100g=" + vitPP100g +
-//                ", vitB6100g=" + vitB6100g +
-//                ", vitB9100g=" + vitB9100g +
-//                ", vitB12100g=" + vitB12100g +
-//                ", calcium100g=" + calcium100g +
-//                ", magnesium100g=" + magnesium100g +
-//                ", iron100g=" + iron100g +
-//                ", fer100g=" + fer100g +
-//                ", betaCarotene100g=" + betaCarotene100g +
-//                ", presenceHuileDePalme=" + presenceHuileDePalme +
-//                ", categorie=" + categorie +
+                ", nutritionGradeFr=" + nutritionGradeFr +
+                ", energie100g=" + energie100g +
+                ", graisse100g=" + graisse100g +
+                ", sucre100g=" + sucre100g +
+                ", fibre100g=" + fibre100g +
+                ", proteine100g=" + proteine100g +
+                ", sel100g=" + sel100g +
+                ", vitA100g=" + vitA100g +
+                ", vitD100g=" + vitD100g +
+                ", vitE100g=" + vitE100g +
+                ", vitK100g=" + vitK100g +
+                ", vitC100g=" + vitC100g +
+                ", vitB1100g=" + vitB1100g +
+                ", vitB2100g=" + vitB2100g +
+                ", vitPP100g=" + vitPP100g +
+                ", vitB6100g=" + vitB6100g +
+                ", vitB9100g=" + vitB9100g +
+                ", vitB12100g=" + vitB12100g +
+                ", calcium100g=" + calcium100g +
+                ", magnesium100g=" + magnesium100g +
+                ", iron100g=" + iron100g +
+                ", fer100g=" + fer100g +
+                ", betaCarotene100g=" + betaCarotene100g +
+                ", presenceHuileDePalme=" + presenceHuileDePalme +
+                ", categorie=" + categorie +
                 ", allergenes=" + allergenes +
-//                ", marque=" + marque +
-//                ", ingredients=" + ingredients +
-//                ", additifs=" + additifs +
+                ", marque=" + marque +
+                ", ingredients=" + ingredients +
+                ", additifs=" + additifs +
                 '}';
     }
 }

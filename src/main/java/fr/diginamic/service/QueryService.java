@@ -1,68 +1,25 @@
 package fr.diginamic.service;
 
-import fr.diginamic.entities.*;
+import fr.diginamic.entities.NamedEntity;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NamedQuery;
 import javax.persistence.NoResultException;
+import java.lang.reflect.InvocationTargetException;
 
 public class QueryService {
 
     private static final EntityManager ENTITY_MANAGER = EntityManagerFactoryService.getInstance().getEntityManager();
-    public static final String NAMED_QUERY_ADDITIF = "additif.findByNom";
-    public static final String NAMED_QUERY_ALLERGENE = "allergene.findByNom";
-    public static final String NAMED_QUERY_CATEGORIE = "categorie.findByNom";
-    public static final String NAMED_QUERY_INGREDIENT = "ingredient.findByNom";
-    public static final String NAMED_QUERY_MARQUE = "marque.findByNom";
     private static final String PARAMETER = "nom";
 
 
-    public static Categorie getCategorieIfExistOrCreate(String nom) {
+    public static <T extends NamedEntity> T getIfExistOnDatabaseOrCreate(String nom, Class<T> type) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException, InstantiationException {
         try {
-            return ENTITY_MANAGER.createNamedQuery(NAMED_QUERY_CATEGORIE, Categorie.class)
+            return ENTITY_MANAGER.createNamedQuery(type.getAnnotation(NamedQuery.class).name(), type)
                     .setParameter(PARAMETER, nom)
                     .getSingleResult();
         } catch (NoResultException e) {
-            return new Categorie(nom);
-        }
-    }
-
-    public static Marque getMarqueIfExistOrCreate(String nom) {
-        try {
-            return ENTITY_MANAGER.createNamedQuery(NAMED_QUERY_MARQUE, Marque.class)
-                    .setParameter(PARAMETER, nom)
-                    .getSingleResult();
-        } catch (NoResultException e) {
-            return new Marque(nom);
-        }
-    }
-
-    public static Ingredient getIngredientIfExistOrCreate(String nom) {
-        try {
-            return ENTITY_MANAGER.createNamedQuery(NAMED_QUERY_INGREDIENT, Ingredient.class)
-                    .setParameter(PARAMETER, nom)
-                    .getSingleResult();
-        } catch (NoResultException e) {
-            return new Ingredient(nom);
-        }
-    }
-
-    public static Allergene getAllergeneIfExistOrCreate(String nom) {
-        try {
-            return ENTITY_MANAGER.createNamedQuery(NAMED_QUERY_ALLERGENE, Allergene.class)
-                    .setParameter(PARAMETER, nom)
-                    .getSingleResult();
-        } catch (NoResultException e) {
-            return new Allergene(nom);
-        }
-    }
-
-    public static Additif getAdditifIfExistOrCreate(String nom) {
-        try {
-            return ENTITY_MANAGER.createNamedQuery(NAMED_QUERY_ADDITIF, Additif.class)
-                    .setParameter(PARAMETER, nom)
-                    .getSingleResult();
-        } catch (NoResultException e) {
-            return new Additif(nom);
+            return type.getConstructor(new Class[] {String.class}).newInstance(nom);
         }
     }
 }
