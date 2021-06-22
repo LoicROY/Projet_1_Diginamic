@@ -6,8 +6,8 @@ import java.util.Set;
 
 @Entity
 @Table(name = "CATEGORIE")
-@NamedQuery(name = "Categorie.findByNom", query = "SELECT c FROM Categorie c WHERE c.nom = :nom")
-public class Categorie extends BasedEntity {
+//@NamedQuery(name = "Categorie.findByNom", query = "SELECT c FROM Categorie c WHERE c.nom = :nom")
+public class Categorie extends BasedNamedEntity {
 
     @OneToMany(mappedBy = "categorie")
     private Set<Produit> produits; // --> = null de base

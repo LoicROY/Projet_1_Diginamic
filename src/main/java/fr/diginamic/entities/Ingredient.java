@@ -5,8 +5,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@NamedQuery(name = "Ingredient.findByNom", query = "SELECT i FROM Ingredient i WHERE i.nom = :nom")
-public class Ingredient extends BasedEntity {
+//@NamedQuery(name = "Ingredient.findByNom", query = "SELECT i FROM Ingredient i WHERE i.nom = :nom")
+public class Ingredient extends BasedNamedEntity {
 
     @ManyToMany(mappedBy = "ingredients")
     private Set<Produit> produits; // --> = null de base

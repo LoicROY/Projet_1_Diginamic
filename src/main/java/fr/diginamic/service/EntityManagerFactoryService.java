@@ -30,7 +30,7 @@ public class EntityManagerFactoryService {
     }
 
     private void connectToDataBase() {
-        this.entityManagerFactory = Persistence.createEntityManagerFactory("open-food-facts");
+        this.entityManagerFactory = Persistence.createEntityManagerFactory("test");
         this.entityManager = this.entityManagerFactory.createEntityManager();
         System.out.println("connected on db");
     }

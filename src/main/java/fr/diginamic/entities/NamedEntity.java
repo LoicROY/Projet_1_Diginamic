@@ -2,5 +2,6 @@ package fr.diginamic.entities;
 
 public interface NamedEntity {
 
-    public String getNom();
+    // Récupère l'attribut unique qui identifie l'objet (autre que l'id)
+    String getNameAttribute();
 }

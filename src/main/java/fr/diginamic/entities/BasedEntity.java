@@ -1,30 +1,20 @@
 package fr.diginamic.entities;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 
-public abstract class BasedEntity implements Serializable, NamedEntity {
+@MappedSuperclass
+public abstract class BasedEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
 
-    @Column(unique = true, nullable = false)
-    protected String nom;
-
     protected BasedEntity() {
     }
 
-    protected BasedEntity(String nom) {
-        this.nom = nom;
-    }
-
-    protected BasedEntity(Long id, String nom) {
+    protected BasedEntity(Long id) {
         this.id = id;
-        this.nom = nom;
     }
 
     public Long getId() {
@@ -35,12 +25,4 @@ public abstract class BasedEntity implements Serializable, NamedEntity {
         this.id = id;
     }
 
-    @Override
-    public String getNom() {
-        return nom;
-    }
-
-    public void setNom(String nom) {
-        this.nom = nom;
-    }
 }

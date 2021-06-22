@@ -5,8 +5,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@NamedQuery(name = "Additif.findByNom", query = "SELECT a FROM Additif a WHERE a.nom = :nom")
-public class Additif extends BasedEntity {
+//@NamedQuery(name = "Additif.findByNom", query = "SELECT a FROM Additif a WHERE a.nom = :nom")
+public class Additif extends BasedNamedEntity {
 
     @ManyToMany(mappedBy = "additifs")
     private Set<Produit> produits; // --> = null de base
@@ -44,12 +44,12 @@ public class Additif extends BasedEntity {
 
         }
     }
+
     public void removeProduit (Produit produit){
         if (produit != null) {
             produit.removeAdditif(this);
         }
     }
-
 
     @Override
     public String toString() {

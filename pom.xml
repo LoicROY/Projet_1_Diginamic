@@ -41,5 +41,12 @@
             <artifactId>hibernate-java8</artifactId>
             <version>5.4.13.Final</version>
         </dependency>
+
+        <!-- dépendance pour le cache de niveau 2 -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-jcache</artifactId>
+            <version>5.5.0.Final</version>
+        </dependency>
     </dependencies>
 </project>

@@ -18,13 +18,10 @@ public class CsvService {
     //REGEX for split and replace
     private static final String SEPARATOR_FOR_SPLIT_CSV_TO_STRINGS = "\\|";
     private static final String SEPARATOR_FOR_SPLIT_STRING_TO_OBJECT = "[,;]";
-    private static final String OLD_REGEX = "[\\*\\_\\(\\)\\<\\>\\.]";
-    private static final String NEW_STRING = "";
 
     //Integer for check and remove
     private static final int NUMBER_OF_VALUES_WAITED = 31;
     private static final int FIRST_ELEMENT = 0;
-    private static final int VARCHAR_MAX_LENGTH = 255;
 
     //Index for produit attributes
     private static final int CATEGORIE_INDEX = 0;
@@ -58,29 +55,13 @@ public class CsvService {
     private static final int ALLERGENES_INDEX = 28;
     private static final int ADDITIFS_INDEX = 29;
 
-    public static Set<Produit> TransformCsvIntoObject(String path)
+    public static List<Produit> TransformCsvIntoProductList(String path)
             throws IOException, InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException {
 
         //Lecture du fichier
         List<String> stringList = readCsvFile(path);
 
-        //Split les lignes en tableau suivant le séparateur |
-        List<String[]> arrayList = splitStringListToArrayList(stringList);
-        arrayList.remove(FIRST_ELEMENT);
-
-        //Check que tous les tableaux ont bien 30 valeurs (enleve le tableau si check fail)
-        checkArrayList(arrayList);
-
-        Set<Produit> produits = new HashSet<>();
-        //Transforme les tableaux en objet
-        for (String[] array : arrayList) {
-            Produit produit = transformArrayToProduct(array);
-            System.out.println(produit);
-            persistProduct(produit);
-            produits.add(produit);
-        }
-
-        return produits;
+        return createAndPersistProductListFromStringList(stringList);
     }
 
     private static List<String> readCsvFile(String path) throws IOException {
@@ -88,49 +69,63 @@ public class CsvService {
         return Files.readAllLines(pathFile, StandardCharsets.UTF_8);
     }
 
-    private static List<String[]> splitStringListToArrayList(List<String> stringList) {
-        List<String[]> arrayList = new ArrayList<>();
+    private static List<Produit> createAndPersistProductListFromStringList(List<String> stringList)
+            throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException {
+
+        stringList.remove(FIRST_ELEMENT);
+        List<Produit> productList = new ArrayList<>();
 
         for (String string : stringList) {
+            //Split les lignes en tableau suivant le séparateur |
             String[] array = string.trim().split(SEPARATOR_FOR_SPLIT_CSV_TO_STRINGS, -1);
-            arrayList.add(array);
+
+            //Check que le tableau contient bien 30 valeurs
+            if (!checkAttributesNumberOk(array)){
+                continue;
+            }
+
+            Produit produit = transformArrayToProduct(array);
+            System.out.println(produit); //TODO comment this for production
+            persistProduct(produit);
+            productList.add(produit);
+            break;
         }
-        return arrayList;
+        return productList;
     }
 
-    private static void checkArrayList(List<String[]> arrayList) {
-        arrayList.removeIf(array -> array.length != NUMBER_OF_VALUES_WAITED);
+    private static boolean checkAttributesNumberOk(String[] array) {
+        return array.length == NUMBER_OF_VALUES_WAITED;
     }
 
     private static Produit transformArrayToProduct(String[] array)
             throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException {
 
         Produit produit = new Produit(
-                array[NOM_INDEX],
-                NutritionGradeFr.valueOf(array[NUTRITION_GRADE_FR_INDEX].toUpperCase()),
-                ParseService.parseFloat(array[ENERGIE_100G_INDEX]),
-                ParseService.parseFloat(array[GRAISSE_100G_INDEX]),
-                ParseService.parseFloat(array[SUCRE_100G_INDEX]),
-                ParseService.parseFloat(array[FIBRE_100G_INDEX]),
-                ParseService.parseFloat(array[PROTEINE_100G_INDEX]),
-                ParseService.parseFloat(array[SEL_100G_INDEX]),
-                ParseService.parseFloat(array[VIT_A_100G_INDEX]),
-                ParseService.parseFloat(array[VIT_D_100G_INDEX]),
-                ParseService.parseFloat(array[VIT_E_100G_INDEX]),
-                ParseService.parseFloat(array[VIT_K_100G_INDEX]),
-                ParseService.parseFloat(array[VIT_C_100G_INDEX]),
-                ParseService.parseFloat(array[VIT_B1_100G_INDEX]),
-                ParseService.parseFloat(array[VIT_B2_100G_INDEX]),
-                ParseService.parseFloat(array[VIT_PP_100G_INDEX]),
-                ParseService.parseFloat(array[VIT_B6_100G_INDEX]),
-                ParseService.parseFloat(array[VIT_B9_100G_INDEX]),
-                ParseService.parseFloat(array[VIT_B12_100G_INDEX]),
-                ParseService.parseFloat(array[CALCIUM_100G_INDEX]),
-                ParseService.parseFloat(array[MAGNESIUM_100G_INDEX]),
-                ParseService.parseFloat(array[IRON_100G_INDEX]),
-                ParseService.parseFloat(array[FER_100G_INDEX]),
-                ParseService.parseFloat(array[BETA_CAROTENE_100G_INDEX]),
-                ParseService.parseBoolean(array[PRESENCE_HUILE_DE_PALME_INDEX])
+                array[NOM_INDEX].trim(),
+                NutritionGradeFr.valueOf(array[NUTRITION_GRADE_FR_INDEX].trim().toUpperCase()),
+                ParseService.parseFloat(array[ENERGIE_100G_INDEX].trim()),
+                ParseService.parseFloat(array[GRAISSE_100G_INDEX].trim()),
+                ParseService.parseFloat(array[SUCRE_100G_INDEX].trim()),
+                ParseService.parseFloat(array[FIBRE_100G_INDEX].trim()),
+                ParseService.parseFloat(array[PROTEINE_100G_INDEX].trim()),
+                ParseService.parseFloat(array[SEL_100G_INDEX].trim()),
+                ParseService.parseFloat(array[VIT_A_100G_INDEX].trim()),
+                ParseService.parseFloat(array[VIT_D_100G_INDEX].trim()),
+                ParseService.parseFloat(array[VIT_E_100G_INDEX].trim()),
+                ParseService.parseFloat(array[VIT_K_100G_INDEX].trim()),
+                ParseService.parseFloat(array[VIT_C_100G_INDEX].trim()),
+                ParseService.parseFloat(array[VIT_B1_100G_INDEX].trim()),
+                ParseService.parseFloat(array[VIT_B2_100G_INDEX].trim()),
+                ParseService.parseFloat(array[VIT_PP_100G_INDEX].trim()),
+                ParseService.parseFloat(array[VIT_B6_100G_INDEX].trim()),
+                ParseService.parseFloat(array[VIT_B9_100G_INDEX].trim()),
+                ParseService.parseFloat(array[VIT_B12_100G_INDEX].trim()),
+                ParseService.parseFloat(array[CALCIUM_100G_INDEX].trim()),
+                ParseService.parseFloat(array[MAGNESIUM_100G_INDEX].trim()),
+                ParseService.parseFloat(array[IRON_100G_INDEX].trim()),
+                ParseService.parseFloat(array[FER_100G_INDEX].trim()),
+                ParseService.parseFloat(array[BETA_CAROTENE_100G_INDEX].trim()),
+                ParseService.parseBoolean(array[PRESENCE_HUILE_DE_PALME_INDEX].trim())
         );
         addAssociation(produit, array);
 
@@ -143,10 +138,15 @@ public class CsvService {
         //Association OneToMany
         produit.setCategorie(
                 QueryService.getIfExistOnDatabaseOrCreate(
-                        cleanString(array[CATEGORIE_INDEX]), Categorie.class));
+                        StringService.resizeIfStringToMuchLonger(
+                                StringService.cleanString(array[CATEGORIE_INDEX])),
+                        Categorie.class));
+
         produit.setMarque(
                 QueryService.getIfExistOnDatabaseOrCreate(
-                        cleanString(array[MARQUE_INDEX]), Marque.class));
+                        StringService.resizeIfStringToMuchLonger(
+                                StringService.cleanString(array[MARQUE_INDEX])),
+                        Marque.class));
 
         //Association ManyToMany
         produit.setIngredients(getObjectListFromString(array[INGREDIENTS_INDEX], Ingredient.class));
@@ -158,25 +158,23 @@ public class CsvService {
             throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException {
 
         Set<T> objects = new HashSet<>();
+
+        //Split la string en tableau de string représentant les objets
         String[] objectsOnStringFormat = stringOfProduct.trim().split(SEPARATOR_FOR_SPLIT_STRING_TO_OBJECT);
+
         for (String objectOnStringFormat : objectsOnStringFormat) {
-            objectOnStringFormat = cleanString(objectOnStringFormat);
+            objectOnStringFormat = StringService.cleanString(objectOnStringFormat); //Enleve les caractères spéciaux de la string
             if (objectOnStringFormat.isBlank()) {
                 continue;
             }
-            if (objectOnStringFormat.length() > VARCHAR_MAX_LENGTH) {
-                objectOnStringFormat = objectOnStringFormat.substring(0, VARCHAR_MAX_LENGTH - 1);
+            objectOnStringFormat = StringService.resizeIfStringToMuchLonger(objectOnStringFormat);
+            if (FilterCollectionService.checkIfAlreadyInList(objects, objectOnStringFormat)) {
+                continue;
             }
             T object= QueryService.getIfExistOnDatabaseOrCreate(objectOnStringFormat, type);
-            if (!FilterSetService.checkIfAlreadyInList(objects, object)) {
-                objects.add(object);
-            }
+            objects.add(object);
         }
         return objects;
-    }
-
-    private static String cleanString(String string) {
-        return string.replaceAll(OLD_REGEX, NEW_STRING).trim();
     }
 
     private static void persistProduct(Produit produit) {
